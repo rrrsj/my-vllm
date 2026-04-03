@@ -14,8 +14,10 @@ LLM
           填充到context中
           返回inputs和position ids
           在使用prefill版本的时候不使用flash attention
-      分配kv cache
-      捕获cuda图
+      分配kv cache：
+        检查显存最大峰值
+      捕获cuda图：
+        将计算图信息全都捕获下来，从而实现完全算子融合
       继续设置在cpu指定，为了防止后续操作再gpu上再执行无关操作
       分配共享内存
       
