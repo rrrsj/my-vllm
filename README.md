@@ -22,4 +22,24 @@ LLM
       继续设置在cpu指定，为了防止后续操作再gpu上再执行无关操作
       分配共享内存
       
-  创建Scheduler(config)
+  创建Scheduler：
+    创建BlockManager
+      **init**：
+        创建列表，列表里放入Block
+        创建使用列表
+        创建空列表
+    创建两个队列，分别负责wating和running
+
+**generate**:
+  add_request:
+    创建序列
+      Sequence：
+        默认是waiting的在开始
+        存储block id
+        最新的token
+    将序列推入scheduler的waiting队列
+    获取一个输入：
+      先处理prefill，不可以同时处理prefilling和decoding
+      batch不能超过，同时不能超过所有的block使用量
+      使用scheduler给这个序列alloc：
+        循环这个序列的所有block
