@@ -40,6 +40,12 @@ LLM
     将序列推入scheduler的waiting队列
     获取一个输入：
       先处理prefill，不可以同时处理prefilling和decoding
-      batch不能超过，同时不能超过所有的block使用量
-      使用scheduler给这个序列alloc：
-        循环这个序列的所有block
+        batch不能超过，同时不能超过所有的block使用量
+        使用scheduler给这个序列alloc：
+          循环这个序列的所有block进行处理
+      再处理decoding
+        逐步读取running队列的数据，如果running数据已经满了，采取末尾淘汰制
+      将每条数据和参数设置好
+  执行generate：
+    对于prefill数据，不使用计算图
+    对于decode数据，使用计算图
